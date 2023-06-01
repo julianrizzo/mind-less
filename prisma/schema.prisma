@@ -1,0 +1,84 @@
+datasource db {
+    provider = "postgresql"
+    url = env("DATABASE_URL")
+}
+
+generator client {
+    provider = "prisma-client-js"
+
+    // Learn more about Preview features: 
+    // https://www.prisma.io/docs/concepts/components/preview-features/client-preview-features
+    previewFeatures = ["fieldReference", "clientExtensions"]
+}
+
+model User {
+    id          Int      @id @default(autoincrement())
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    email       String   @unique
+    firstName   String
+    lastName    String
+    login       Login?
+}
+
+model Login {
+    id              Int         @id @default(autoincrement())
+    createdAt       DateTime    @default(now())
+    updatedAt       DateTime    @updatedAt
+    passwordHash    String
+    user            User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId          Int    @unique
+}
+
+model Area {
+    id              Int     @id @default(autoincrement())
+    createdAt       DateTime    @default(now())
+    updatedAt       DateTime    @updatedAt
+    name            String
+    desc            String
+    archive         Boolean
+    projects        Project?
+}
+
+model Project {
+    id              Int         @id @default(autoincrement())
+    createdAt       DateTime    @default(now())
+    updatedAt       DateTime    @updatedAt
+    name            String
+    desc            String
+    status          Status
+    startDate       DateTime
+    endDate         DateTime
+    priority        Priority
+    archive         Boolean
+    area            Area        @relation(fields: [areaId], references: [id], onDelete: Cascade)
+    areaId          Int         @unique
+    resource        Resource?
+}
+
+model Resource {
+    id              Int         @id @default(autoincrement())
+    createdAt       DateTime    @default(now())
+    updatedAt       DateTime    @updatedAt
+    name            String
+    desc            String
+    type            String
+    url             String
+    archive         Boolean
+    project         Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+    projectId       Int         @unique
+}
+
+enum Status {
+    INBOX
+    PLANNED
+    INPROGRESS
+    INREVIEW
+    COMPLETED
+}
+
+enum Priority {
+    LOW
+    MED
+    HIGH
+}
