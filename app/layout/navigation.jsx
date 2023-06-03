@@ -13,24 +13,21 @@ const linksData = [
 const Navigation = () => {
   const pathname = usePathname();
   return (
-    <div className='bg-rose-700'>
-      <h1>Navigation</h1>
-      <div>
-        {linksData.map((link) => {
-          const isActive = pathname.startsWith(link.href);
+    <div className='bg-cream flex flex-col h-full items-center m-8 p-4 rounded-t-2xl'>
 
-          return (
-            <Link
-              className={(isActive ? 'bg-gray-950' : 'bg-gray-800') + ''}
-              href={link.href}
-              key={link.text}
-            >
-              {link.text}
-            </Link>
-          );
-        })}
-      </div>
+      {linksData.map((link) => {
+        const isActive = pathname.startsWith(link.href);
 
+        return (
+          <Link
+            className={(isActive ? 'bg-blue text-white' : 'text-black') + ' rounded-full px-4 py-2 max-w-min'}
+            href={link.href}
+            key={link.text}
+          >
+            {link.text}
+          </Link>
+        );
+      })}
 
     </div>
   );
